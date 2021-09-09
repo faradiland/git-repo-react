@@ -1,31 +1,49 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Card, Typography, Form, Input, Button, Row, Col } from 'antd'
+import { Card, Form, Input, Button, Row, Col, Table } from 'antd'
 import { fetchPosts, handleState } from '../redux/githubRepo/action'
 
 const GithubRepo = () => {
   const dispatch = useDispatch();
   const state = useSelector(state => state.Github);
 
-  useEffect(() => {
-    dispatch(fetchPosts());
-  }, []);
-
-  const { Title, Text } = Typography;
-
   const onFinish = (values: any) => {
     console.log('Success:', values);
+    dispatch(fetchPosts());
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
+  const handleChange = (e) => {
+    debugger
+    dispatch(handleState('userGit', e.target.value))
+  }
+  const columns = [
+    {
+      title: 'Project name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Project URL',
+      dataIndex: 'url',
+      key: 'url',
+      render: (text) => <a href={text}>{text}</a>
+    },
+    {
+      title: 'Default Branch',
+      dataIndex: 'default_branch',
+      key: 'default_branch',
+    }
+  ]
+
   return (
     <Card>
       <Form
         name="basic"
-        initialValues={{ remember: true }}
+        // initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -35,9 +53,13 @@ const GithubRepo = () => {
             <Form.Item
               label="Username"
               name="username"
-              rules={[{ required: true, message: 'Please input git username!' }]}
+              rules={[{ required: true, message: 'Please input Github Username!' }]}
             >
-              <Input />
+              <Input
+                initialValue={state.username}
+                onChange={(e) => handleChange(e)}
+                placeholder="Username Git"
+              />
             </Form.Item>
 
           </Col>
@@ -45,9 +67,17 @@ const GithubRepo = () => {
 
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                Search
               </Button>
             </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Table
+              columns={columns}
+              dataSource={state.repoList}
+            />
           </Col>
         </Row>
       </Form>

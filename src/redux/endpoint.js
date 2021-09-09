@@ -1,5 +1,5 @@
 const Endpoint = {
-  GET_REPO: 'orgs/ORG/repos',
+  GET_REPO: '/repos',
 }
 
 export default Endpoint
