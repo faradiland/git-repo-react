@@ -29,5 +29,5 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://faradiland.github.io/gitRepoList"
+  "homepage": "https://faradiland.github.io/git-repo-react"
 }
